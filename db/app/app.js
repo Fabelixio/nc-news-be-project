@@ -4,9 +4,13 @@ const {handleServerErrors,
     handlePsqlErrors,
     handleCustomErrors,
     handles404} = require("./../errors")
+const {getJson} = require("./../controllers/api.controller")
+
 const app = express()
 
 app.get('/api/topics', getTopics)
+
+app.get('/api', getJson)
 
 app.use(handleCustomErrors);
 

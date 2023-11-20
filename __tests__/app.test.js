@@ -7,6 +7,20 @@ const seed = require("./../db/seeds/seed")
 beforeEach(() => seed({ topicData, userData, commentData, articleData }))
 afterAll(() => db.end())
 
+//api
+describe("GET /api", () => {
+    test("status: 200, responds with JSON object containing all available endpoints in the API", () => {
+        return request(app)
+        .get('/api')
+        .expect(200)
+        .then(({ body }) => {
+            console.log(body)
+            expect(body).toHaveProperty('endpoints')
+        })
+    })
+})
+
+//topics
 describe("GET /api/topics", () => {
     test("responds with status code 200", () => {
         return request(app).get('/api/topics').expect(200)
