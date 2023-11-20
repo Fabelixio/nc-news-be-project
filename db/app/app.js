@@ -1,5 +1,5 @@
 const express = require('express')
-const {getTopics} = require('./../controllers/topic.controllers')
+const {getTopics, getJson} = require('./../controllers/topic.controllers')
 const {handleServerErrors,
     handlePsqlErrors,
     handleCustomErrors,
@@ -7,6 +7,8 @@ const {handleServerErrors,
 const app = express()
 
 app.get('/api/topics', getTopics)
+
+// app.get('/api', getJson)
 
 app.use(handleCustomErrors);
 
