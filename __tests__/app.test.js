@@ -1,0 +1,37 @@
+const app = require("./../db/app/app")
+const request = require("supertest")
+const {topicData, userData, commentData, articleData} = require("./../db/data/test-data/index")
+const db = require("./../db/connection")
+const seed = require("./../db/seeds/seed")
+
+beforeEach(() => seed({ topicData, userData, commentData, articleData }))
+afterAll(() => db.end())
+
+describe("GET /api/topics", () => {
+    test("responds with status code 200", () => {
+        return request(app).get('/api/topics').expect(200)
+    })
+    test("returns an array of all topic objects with required properties", () => {
+        return request(app)
+        .get('/api/topics')
+        .expect(200)
+        .then(({ body }) => {
+            const topicObj = {
+                description: expect.any(String),
+                slug: expect.any(String)
+            }
+            expect(body.topics.length === 3)
+            body.topics.forEach((topicItem) => {
+                expect(topicItem).toMatchObject(topicObj)
+            })
+        })
+    })
+    test("status: 404, responds with error message for valid but non-existant path", () => {
+        return request(app)
+        .get('/api/wrongpath')
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.msg).toBe("path not found")
+        })
+    })
+})
