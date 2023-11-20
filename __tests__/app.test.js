@@ -20,7 +20,7 @@ describe("GET /api/topics", () => {
                 description: expect.any(String),
                 slug: expect.any(String)
             }
-            expect(body.topics.length === 3)
+            expect(body.topics).toHaveLength(3)
             body.topics.forEach((topicItem) => {
                 expect(topicItem).toMatchObject(topicObj)
             })
