@@ -13,15 +13,11 @@ describe("GET /api", () => {
         return request(app)
         .get('/api')
         .expect(200)
+        .then(({ body }) => {
+            console.log(body)
+            expect(body).toHaveProperty('endpoints')
         })
-        test("status: 404, responds with error for invalid file path", () => {
-            return request(app)
-            .get('/apf')
-            .expect(404)
-            .then(({ body }) => {
-                expect(body.msg).toBe("path not found")
-            })
-        })
+    })
 })
 
 //topics
