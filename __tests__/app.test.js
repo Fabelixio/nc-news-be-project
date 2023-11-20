@@ -26,7 +26,7 @@ describe("GET /api/topics", () => {
             })
         })
     })
-    test("status: 404, responds with error message for valid but non-existant path", () => {
+    test("status: 404, responds with error message for invalid file path", () => {
         return request(app)
         .get('/api/wrongpath')
         .expect(404)
