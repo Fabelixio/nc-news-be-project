@@ -12,8 +12,8 @@ describe("GET /api/articles",() => {
         return request(app)
         .get('/api/articles')
         .expect(200)
-        .then(({ body: { article }}) => {
-            article.forEach((article) => {
+        .then(({ body: { articles }}) => {
+            articles.forEach((article) => {
                 expect(article.article_id).toEqual(expect.any(Number));
                 expect(article.topic).toEqual(expect.any(String));
                 expect(article.title).toEqual(expect.any(String));;
@@ -21,11 +21,11 @@ describe("GET /api/articles",() => {
                 expect(article.author).toEqual(expect.any(String));
                 expect(article.created_at).toEqual(expect.any(String))
                 expect(article.comment_count).toEqual(expect.any(String))
-                expect(article.article_img_url).toEqual(expect.any(String));
+                expect(article.article_img_url).toEqual(expect.any(String))
+                expect(article.hasOwnProperty('body')).toBe(false)
             })
-            expect(article.length).toBe(13)
-            expect(article.hasOwnProperty('body')).toBe(false)
-            expect(article).toBeSortedBy('created_at', {
+            expect(articles.length).toBe(13)
+            expect(articles).toBeSortedBy('created_at', {
                 descending: true
             })
         })

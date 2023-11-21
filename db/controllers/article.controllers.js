@@ -3,7 +3,7 @@ const {retrieveArticleById, retrieveAllArticles,} = require("./../models/article
 exports.getArticles = (req, res, next) => {
     retrieveAllArticles()
     .then((articles) => {
-        res.status(200).send({ article: articles })
+        res.status(200).send({ articles })
     })
     .catch(next)
 }
