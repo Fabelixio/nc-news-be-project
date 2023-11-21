@@ -6,16 +6,38 @@ const seed = require("./../db/seeds/seed")
 
 beforeEach(() => seed({ topicData, userData, commentData, articleData }))
 afterAll(() => db.end())
-
-
-//articles // add another request test
+//articles
 describe("GET /api/articles",() => {
+    test("status: 200, responds with an array of article objects, sorted in descending order", () => {
+        return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then(({ body: { articles }}) => {
+            articles.forEach((article) => {
+                expect(article.article_id).toEqual(expect.any(Number));
+                expect(article.topic).toEqual(expect.any(String));
+                expect(article.title).toEqual(expect.any(String));;
+                expect(article.votes).toEqual(expect.any(Number));
+                expect(article.author).toEqual(expect.any(String));
+                expect(article.created_at).toEqual(expect.any(String))
+                expect(article.comment_count).toEqual(expect.any(String))
+                expect(article.article_img_url).toEqual(expect.any(String))
+                expect(article.hasOwnProperty('body')).toBe(false)
+            })
+            expect(articles.length).toBe(13)
+            expect(articles).toBeSortedBy('created_at', {
+                descending: true
+            })
+        })
+    })
+})
+
+describe("GET /api/articles/:article_id",() => {
     test("status: 200, responds with article by id request", () => {
         return request(app)
         .get('/api/articles/1')
         .expect(200)
         .then(( { body: { article }}) => {
-            console.log(article)
             expect(article).toMatchObject({
                 article_id: 1,
                 title: "Living in the shadow of a great man",
@@ -41,19 +63,6 @@ describe("GET /api/articles",() => {
         .expect(404)
         .then(({ body }) => {
             expect(body.msg).toBe('article does not exist')
-        })
-    })
-})
-
-
-//api
-describe("GET /api", () => {
-    test("status: 200, responds with JSON object containing all available endpoints in the API", () => {
-        return request(app)
-        .get('/api')
-        .expect(200)
-        .then(({ body }) => {
-            expect(body).toHaveProperty('endpoints')
         })
     })
 })
@@ -85,6 +94,20 @@ describe("GET /api/topics", () => {
         .expect(404)
         .then(({ body }) => {
             expect(body.msg).toBe("path not found")
+        })
+    })
+})
+
+//api
+describe("GET /api", () => {
+    test("status: 200, responds with JSON object containing all available endpoints in the API", () => {
+        return request(app)
+        .get('/api')
+        .expect(200)
+        .then(({ body: { endpoints } }) => {
+            expect(endpoints).toHaveProperty('GET /api/topics')
+            expect(endpoints).toHaveProperty('GET /api/articles')
+            expect(endpoints).toHaveProperty('GET /api/articles/:article_id')
         })
     })
 })
