@@ -5,7 +5,7 @@ const {handleServerErrors,
     handleCustomErrors,
     handles404} = require("./../errors")
 const {getJson} = require("./../controllers/api.controller")
-const { getArticleById } = require('../controllers/article.controllers')
+const { getArticleById, getArticles } = require('../controllers/article.controllers')
 
 const app = express()
 
@@ -15,13 +15,11 @@ app.get('/api', getJson)
 
 app.get('/api/articles/:article_id', getArticleById)
 
+app.get('/api/articles', getArticles)
+
 app.use(handleCustomErrors);
-
 app.use(handlePsqlErrors);
-
 app.use(handleServerErrors);
-
 app.all("*", handles404)
-
 
 module.exports = app
