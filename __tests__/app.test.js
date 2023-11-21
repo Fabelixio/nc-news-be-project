@@ -82,10 +82,20 @@ describe("GET /api/articles",() => {
 //         })
 //     })
 //     test("400: responds with error if id is invalid", () => {
-
+//         return request(app)
+//         .get('/api/articles/notarticle/comments')
+//         .expect(400)
+//         .then(({ body }) => {
+//             expect(body.msg).toBe('bad request')
+//         })
 //     })
 //     test("404: responds with error if id is valid but article does not exist", () => {
-
+//         return request(app)
+//         .get('/api/articles/60/comments')
+//         .expect(404)
+//         .then(({ body }) => {
+//             expect(body.msg).toBe('path not found')
+//         })
 //     })
 
 // })
