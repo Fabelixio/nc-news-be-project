@@ -2,8 +2,8 @@ const {retrieveArticleById, retrieveAllArticles,} = require("./../models/article
 
 exports.getArticles = (req, res, next) => {
     retrieveAllArticles()
-    .then((article) => {
-        res.status(200).send({ article: article })
+    .then((articles) => {
+        res.status(200).send({ article: articles })
     })
     .catch(next)
 }

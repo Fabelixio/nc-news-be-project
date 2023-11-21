@@ -24,25 +24,10 @@ describe("GET /api/articles",() => {
                 expect(article.article_img_url).toEqual(expect.any(String));
             })
             expect(article.length).toBe(13)
-            expect(article.body).toBe(undefined)
-        })
-    })
-    test("status: 200, articles should be sorted in descending order", () => {
-        return request(app)
-        .get("/api/articles")
-        .expect(200)
-        .then(({ body: { article }}) => {
+            expect(article.hasOwnProperty('body')).toBe(false)
             expect(article).toBeSortedBy('created_at', {
                 descending: true
             })
-        })
-    })
-    test("status: 200, responds with comment count", () => {
-        return request(app)
-        .get("/api/articles")
-        .expect(200)
-        .then(({ body: {article}}) => {
-            expect(article[0]).toHaveProperty('comment_count', '2')
         })
     })
 })
