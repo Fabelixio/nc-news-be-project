@@ -44,7 +44,51 @@ describe("GET /api/articles",() => {
         })
     })
 })
+//article comments
+// describe("GET /api/articles/:article_id/comments", () => {
+//     test("status: 200, responds with an array of comments that relate to the chosen article", () => {
+//         return request(app)
+//         .get('/api/articles/5/comments')
+//         .expect(200)
+//         .then(({body: { comments }}) => {
+//             expect(comments).toHaveLength(2)
+//             expect(Array.isArray(comments)).toBe(true)
+//             const commentExample = {
+//                 body: expect.any(String),
+//                 votes: expect.any(Number),
+//                 author: expect.any(String),
+//                 article_id: 5,
+//                 created_at: expect.any(String)
+//             }
+//             comments.forEach((comment) => {
+//                 expect(comment).toMatchObject(commentExample)
+//             })
+//         })
+//     })
+//     test("200: responds with empty array if article exists but has no comments",() => {
+//         return request(app)
+//         .get('/api/articles/2/comments')
+//         .expect(200)
+//         .then(({ body: { comments }}) => {
+//             expect(comments).toEqual([])
+//         })
+//     })
+//     test("status: 200, most recent comment is served first", () => {
+//         return request(app)
+//         .get('/api/articles/1/comments')
+//         .expect(200)
+//         .then(({body: { comments }}) => {
+//             expect(comments).toBeSortedBy('created_at', {descending: true})
+//         })
+//     })
+//     test("400: responds with error if id is invalid", () => {
 
+//     })
+//     test("404: responds with error if id is valid but article does not exist", () => {
+
+//     })
+
+// })
 
 //api
 describe("GET /api", () => {

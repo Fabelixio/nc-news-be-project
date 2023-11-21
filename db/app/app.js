@@ -15,6 +15,8 @@ app.get('/api', getJson)
 
 app.get('/api/articles/:article_id', getArticleById)
 
+app.get('/api/article/:article_id/comments',)
+
 app.use(handleCustomErrors);
 
 app.use(handlePsqlErrors);
