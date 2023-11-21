@@ -68,19 +68,6 @@ describe("GET /api/articles/:article_id",() => {
 })
 
 
-//api
-describe("GET /api", () => {
-    test("status: 200, responds with JSON object containing all available endpoints in the API", () => {
-        return request(app)
-        .get('/api')
-        .expect(200)
-        .then(({ body }) => {
-            expect(body).toHaveProperty('endpoints')
-        })
-    })
-})
-
-
 //topics
 describe("GET /api/topics", () => {
     test("responds with status code 200", () => {
@@ -107,6 +94,20 @@ describe("GET /api/topics", () => {
         .expect(404)
         .then(({ body }) => {
             expect(body.msg).toBe("path not found")
+        })
+    })
+})
+
+//api
+describe("GET /api", () => {
+    test("status: 200, responds with JSON object containing all available endpoints in the API", () => {
+        return request(app)
+        .get('/api')
+        .expect(200)
+        .then(({ body: { endpoints } }) => {
+            expect(endpoints).toHaveProperty('GET /api/topics')
+            expect(endpoints).toHaveProperty('GET /api/articles')
+            expect(endpoints).toHaveProperty('GET /api/articles/:article_id')
         })
     })
 })
