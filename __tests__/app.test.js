@@ -112,7 +112,55 @@ describe("GET /api/articles/:article_id/comments", () => {
     })
 })
 
-
+describe("POST /api/articles/:article_id/comments", () => {
+    test("201: responds with the posted comment", () => {
+        const newComment = {
+            username: "icellusedkars",
+            body: "comment test",
+        };
+        return request(app)
+        .post('/api/articles/1/comments')
+        .send(newComment)
+        .expect(201)
+        .then(({ body: { comment } }) => {
+            const expectedComment = {
+                body: "comment test",
+                author: "icellusedkars",
+                article_id: 1,
+                votes: 0,
+                created_at: expect.any(String),
+            }
+            expect(comment).toMatchObject(expectedComment)
+            })
+        })
+    test("400: responds with error when missing required information", () => {
+        return request(app)
+        .post('/api/articles/9/comments')
+        .send({})
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.msg).toBe('bad request')
+        })
+    })
+    test("404: responds with error when article id is valid but non-existant", () => {
+        return request(app)
+        .post('/api/article/100/comments')
+        .send({username: 'icellusedkars', body: 'comment test.'})
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.msg).toBe('path not found')
+        })
+    })
+    test("400: responds with error when article id is invalid", () => {
+        return request(app)
+        .post('/api/article/notAnArticle/comments')
+        .send({username: 'icellusedkars', body: 'comment test.'})
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.msg).toBe('path not found')
+        })
+    })
+})
 
 //topics
 describe("GET /api/topics", () => {
@@ -155,6 +203,7 @@ describe("GET /api", () => {
             expect(endpoints).toHaveProperty('GET /api/articles')
             expect(endpoints).toHaveProperty('GET /api/articles/:article_id')
             expect(endpoints).toHaveProperty('GET /api/articles/:article_id/comments')
+            expect(endpoints).toHaveProperty('POST /api/articles/:article_id/comments')
         })
     })
 })

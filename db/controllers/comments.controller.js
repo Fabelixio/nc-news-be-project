@@ -1,4 +1,4 @@
-const { retrieveCommentsByArticleId } = require('./../models/comments.models')
+const { retrieveCommentsByArticleId, createComment } = require('./../models/comments.models')
 const { checkExists } = require("../seeds/utils")
 
 
@@ -14,3 +14,20 @@ exports.getCommentsByArticleId = (req, res, next) => {
     })
     .catch(next)
 }
+
+exports.postComment = (req, res, next) => {
+    const author = req.body.username
+    const body = req.body.body
+    const article_id = req.params.article_id
+    const commentPromise = createComment(body, author, article_id)
+    const articlePromise = checkExists("articles", "article_id", article_id)
+    const promiseArray = [commentPromise, articlePromise]
+    Promise.all(promiseArray)
+    .then((resolvedPromises) => {
+        const commentArray = resolvedPromises[0]
+        const comment = commentArray[0]
+        res.status(201).send({ comment })
+    })
+    .catch(next)
+
+};
