@@ -54,7 +54,7 @@ describe("GET /api/articles/:article_id",() => {
         .get('/api/articles/invalid_id')
         .expect(400)
         .then(({ body }) => {
-            expect(body.msg).toBe("invalid data type")
+            expect(body.msg).toBe("bad request")
         })
     })
     test("status: 404, responds with error for article that doesn't exist", () => {
@@ -108,6 +108,7 @@ describe("GET /api", () => {
             expect(endpoints).toHaveProperty('GET /api/topics')
             expect(endpoints).toHaveProperty('GET /api/articles')
             expect(endpoints).toHaveProperty('GET /api/articles/:article_id')
+            expect(endpoints).toHaveProperty('GET /api/articles/:article_id/comments')
         })
     })
 })
