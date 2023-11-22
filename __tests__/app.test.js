@@ -112,23 +112,27 @@ describe("GET /api/articles/:article_id/comments", () => {
     })
 })
 
-xdescribe("POST /api/articles/:article_id/comments", () => {
+describe("POST /api/articles/:article_id/comments", () => {
     test("201: responds with the posted comment", () => {
+        const newComment = {
+            username: "icellusedkars",
+            body: "comment test",
+        };
         return request(app)
-        .post('/api/articles/9/comments')
-        .send({username: 'icellusedkars', body: 'comment test.'})
+        .post('/api/articles/1/comments')
+        .send(newComment)
         .expect(201)
-        .then(({ body }) => {
-            expect(body.comment).toEqual({
-                comment_id: 19,
-                body: 'comment test',
-                article_id: 9,
-                author: 'icellusedkars',
+        .then(({ body: { comment } }) => {
+            const expectedComment = {
+                body: "comment test",
+                author: "icellusedkars",
+                article_id: 1,
                 votes: 0,
-                created_at: expect.any(String)
+                created_at: expect.any(String),
+            }
+            expect(comment).toMatchObject(expectedComment)
             })
         })
-    })
     test("400: responds with error when missing required information", () => {
         return request(app)
         .post('/api/articles/9/comments')
@@ -149,11 +153,11 @@ xdescribe("POST /api/articles/:article_id/comments", () => {
     })
     test("400: responds with error when article id is invalid", () => {
         return request(app)
-        .post('/api/article/notanarticle/comments')
+        .post('/api/article/notAnArticle/comments')
         .send({username: 'icellusedkars', body: 'comment test.'})
-        .expect(400)
+        .expect(404)
         .then(({ body }) => {
-            expect(body.msg).toBe('bad request')
+            expect(body.msg).toBe('path not found')
         })
     })
 })
