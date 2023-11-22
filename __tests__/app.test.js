@@ -203,6 +203,7 @@ describe("GET /api", () => {
             expect(endpoints).toHaveProperty('GET /api/articles')
             expect(endpoints).toHaveProperty('GET /api/articles/:article_id')
             expect(endpoints).toHaveProperty('GET /api/articles/:article_id/comments')
+            expect(endpoints).toHaveProperty('POST /api/articles/:article_id/comments')
         })
     })
 })
