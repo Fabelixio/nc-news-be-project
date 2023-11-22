@@ -105,6 +105,7 @@ describe("GET /api", () => {
         .expect(200)
         .then(({ body }) => {
             expect(body).toHaveProperty('endpoints')
+            expect(body).toHaveProperty('GET api/articles/:article_id/comments')
         })
     })
 })
