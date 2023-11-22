@@ -3,7 +3,6 @@ const request = require("supertest")
 const {topicData, userData, commentData, articleData} = require("./../db/data/test-data/index")
 const db = require("./../db/connection")
 const seed = require("./../db/seeds/seed")
-const toBeSortedBy = require('jest-sorted')
 
 beforeEach(() => seed({ topicData, userData, commentData, articleData }))
 afterAll(() => db.end())
@@ -46,12 +45,13 @@ describe("GET /api/articles",() => {
 })
 //article comments
 describe("GET /api/articles/:article_id/comments", () => {
-    test("200: responds with an array of comments that relate to the chosen article", () => {
+    test("200: responds with an array of comments that relate to the chosen article served most recent first", () => {
         return request(app)
         .get('/api/articles/1/comments')
         .expect(200)
         .then(({body: { comments }}) => {
             expect(comments).toHaveLength(11)
+            expect(comments).toBeSortedBy('created_at', {descending: true})
             comments.forEach((comment) => {
                 expect(comment.article_id).toBe(1)
                 expect(comment).toMatchObject({
@@ -69,14 +69,6 @@ describe("GET /api/articles/:article_id/comments", () => {
         .expect(200)
         .then(({ body: { comments }}) => {
             expect(comments).toEqual([])
-        })
-    })
-    test("status: 200, most recent comment is served first", () => {
-        return request(app)
-        .get('/api/articles/1/comments')
-        .expect(200)
-        .then(({body: { comments }}) => {
-            expect(comments).toBeSortedBy('created_at', {descending: true})
         })
     })
     test("400: responds with error if id is invalid", () => {
