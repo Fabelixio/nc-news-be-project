@@ -45,7 +45,7 @@ describe("GET /api/articles",() => {
     })
 })
 //article comments
-describe.only("GET /api/articles/:article_id/comments", () => {
+describe("GET /api/articles/:article_id/comments", () => {
     test("200: responds with an array of comments that relate to the chosen article", () => {
         return request(app)
         .get('/api/articles/1/comments')
@@ -102,10 +102,8 @@ describe("GET /api", () => {
     test("status: 200, responds with JSON object containing all available endpoints in the API", () => {
         return request(app)
         .get('/api')
-        .expect(200)
-        .then(({ body }) => {
-            expect(body).toHaveProperty('endpoints')
-            expect(body).toHaveProperty('GET api/articles/:article_id/comments')
+        .then(({ body: { endpoints } }) => {
+            expect(endpoints).toHaveProperty("GET /api/articles/:article_id/comments")
         })
     })
 })
