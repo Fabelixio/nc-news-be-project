@@ -233,13 +233,13 @@ describe("POST /api/articles/:article_id/comments", () => {
     })
 })
 
-xdescribe("DELETE /api/comments/:comment_id", () => {
+describe("DELETE /api/comments/:comment_id", () => {
     test("204: responds with no content and deletes the comment selected by id from the database", () => {
         return request(app)
         .delete('/api/comments/1')
         .expect(204)
     })
-    xtest("400: responds with error when given invalid comment id", () => {
+    test("400: responds with error when given invalid comment id", () => {
         return request(app)
         .delete('/api/comments/notacomment')
         .expect(400)
@@ -247,7 +247,7 @@ xdescribe("DELETE /api/comments/:comment_id", () => {
             expect(body.msg).toBe('bad request')
         })
     })
-    xtest("404: responds with error when given valid but non existant comment id", () => {
+    test("404: responds with error when given valid but non existant comment id", () => {
         return request(app)
         .delete('/api/comments/100')
         .expect(404)

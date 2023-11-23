@@ -1,4 +1,4 @@
-const { retrieveCommentsByArticleId, createComment } = require('./../models/comments.models')
+const { retrieveCommentsByArticleId, createComment, removeComment } = require('./../models/comments.models')
 const { checkExists } = require("../seeds/utils")
 
 
@@ -29,5 +29,13 @@ exports.postComment = (req, res, next) => {
         res.status(201).send({ comment })
     })
     .catch(next)
-
 };
+
+exports.deleteCommentById = (req, res, next) => {
+    const { comment_id } = req.params
+    removeComment(comment_id)
+    .then(() => {
+        res.status(204).send()
+    })
+    .catch(next)
+}
