@@ -1,11 +1,24 @@
 const {retrieveArticleById, retrieveAllArticles, updateArticleVotesById} = require("./../models/article.models")
+const { checkExists } = require('../seeds/utils')
 
 exports.getArticles = (req, res, next) => {
-    retrieveAllArticles()
-    .then((articles) => {
-        res.status(200).send({ articles })
-    })
-    .catch(next)
+    const { topic } = req.query
+    if(topic) {
+        checkExists("topics", "slug", topic)
+        .then(() => {
+            retrieveAllArticles(topic)
+            .then((articles) => {
+                res.status(200).send({ articles })
+            })
+        })
+        .catch(next)
+    } else {
+        retrieveAllArticles()
+        .then((articles) => {
+            res.status(200).send({ articles })
+        })
+        .catch(next)
+    }
 }
 
 exports.getArticleById = (req, res, next) => {
