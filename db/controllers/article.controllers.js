@@ -1,9 +1,16 @@
 const {retrieveArticleById, retrieveAllArticles, updateArticleVotesById} = require("./../models/article.models")
+const { checkExists } = require('../seeds/utils')
 
 exports.getArticles = (req, res, next) => {
-    retrieveAllArticles()
-    .then((articles) => {
-        res.status(200).send({ articles })
+    const { topic } = req.query
+    const topicPromise = [retrieveAllArticles(topic)]
+    if(topic) {
+        topicPromise.push(checkExists("topics", "slug", topic))
+    }
+    Promise.all(topicPromise)
+    .then((resolvedPromise) => {
+        const article = resolvedPromise[0]
+        res.status(200).send({ article })
     })
     .catch(next)
 }
