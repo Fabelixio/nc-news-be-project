@@ -56,6 +56,14 @@ describe("GET /api/articles",() => {
             expect(msg).toBe('path not found')
         })
     })
+    test("200: should respond with accurate comment_count property", () => {
+        return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then(({ body: { article }}) => {
+            expect(article[0].comment_count).toBe('2')
+        })
+    })
 })
 
 describe("GET /api/articles/:article_id",() => {
@@ -89,6 +97,13 @@ describe("GET /api/articles/:article_id",() => {
         .expect(404)
         .then(({ body }) => {
             expect(body.msg).toBe('article does not exist')
+        })
+    })
+    test("200: should respond with an article that includes an accurate comment_count", () => {
+        return request(app)
+        .get('/api/articles/1')
+        .then(({ body: { article }}) => {
+            expect(article.comment_count).toBe('11')
         })
     })
 })
