@@ -4,6 +4,7 @@ const {handleServerErrors, handlePsqlErrors, handleCustomErrors, handles404} = r
 const {getJson} = require("./../controllers/api.controller")
 const { getArticleById, getArticles, updateArticleVotes } = require('../controllers/article.controllers')
 const { getCommentsByArticleId, postComment, deleteCommentById } = require('../controllers/comments.controller')
+const { getUsers } = require('../controllers/users.controllers')
 
 const app = express()
 app.use(express.json())
@@ -23,6 +24,8 @@ app.post('/api/articles/:article_id/comments', postComment)
 app.patch('/api/articles/:article_id', updateArticleVotes)
 
 app.delete('/api/comments/:comment_id', deleteCommentById)
+
+app.get('/api/users', getUsers)
 
 app.use(handleCustomErrors);
 app.use(handlePsqlErrors);
