@@ -233,6 +233,30 @@ describe("POST /api/articles/:article_id/comments", () => {
     })
 })
 
+describe("DELETE /api/comments/:comment_id", () => {
+    test("204: responds with no content and deletes the comment selected by id from the database", () => {
+        return request(app)
+        .delete('/api/comments/1')
+        .expect(204)
+    })
+    test("400: responds with error when given invalid comment id", () => {
+        return request(app)
+        .delete('/api/comments/notacomment')
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.msg).toBe('bad request')
+        })
+    })
+    test("404: responds with error when given valid but non existant comment id", () => {
+        return request(app)
+        .delete('/api/comments/100')
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.msg).toBe('comment not found')
+        })
+    })
+})
+
 //topics
 describe("GET /api/topics", () => {
     test("200: responds with status code 200", () => {
@@ -276,6 +300,7 @@ describe("GET /api", () => {
             expect(endpoints).toHaveProperty('GET /api/articles/:article_id/comments')
             expect(endpoints).toHaveProperty('POST /api/articles/:article_id/comments')
             expect(endpoints).toHaveProperty('PATCH /api/articles/:article_id')
+            expect(endpoints).toHaveProperty('DELETE /api/comments/:comment_id')
         })
     })
 })
