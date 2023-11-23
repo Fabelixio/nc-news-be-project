@@ -300,6 +300,7 @@ describe("GET /api", () => {
             expect(endpoints).toHaveProperty('GET /api/articles/:article_id/comments')
             expect(endpoints).toHaveProperty('POST /api/articles/:article_id/comments')
             expect(endpoints).toHaveProperty('PATCH /api/articles/:article_id')
+            expect(endpoints).toHaveProperty('DELETE /api/comments/:comment_id')
         })
     })
 })
