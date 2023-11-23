@@ -257,6 +257,24 @@ describe("DELETE /api/comments/:comment_id", () => {
     })
 })
 
+describe("GET /api/users", () => {
+    test("200: responds with an array of user objects", () => {
+        return request(app)
+        .get('/api/users')
+        .expect(200)
+        .then(({ body: { users }}) => {
+            expect(users.length).toBe(4)
+            users.forEach((user) => {
+                expect(user).toMatchObject({
+                    username: expect.any(String),
+                    name: expect.any(String),
+                    avatar_url: expect.any(String),
+            })
+            })
+        })
+    })
+})
+
 //topics
 describe("GET /api/topics", () => {
     test("200: responds with status code 200", () => {
@@ -301,6 +319,7 @@ describe("GET /api", () => {
             expect(endpoints).toHaveProperty('POST /api/articles/:article_id/comments')
             expect(endpoints).toHaveProperty('PATCH /api/articles/:article_id')
             expect(endpoints).toHaveProperty('DELETE /api/comments/:comment_id')
+            expect(endpoints).toHaveProperty('GET /api/users')
         })
     })
 })
