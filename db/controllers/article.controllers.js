@@ -1,4 +1,4 @@
-const {retrieveArticleById, retrieveAllArticles,} = require("./../models/article.models")
+const {retrieveArticleById, retrieveAllArticles, updateArticleVotesById} = require("./../models/article.models")
 
 exports.getArticles = (req, res, next) => {
     retrieveAllArticles()
@@ -11,6 +11,16 @@ exports.getArticles = (req, res, next) => {
 exports.getArticleById = (req, res, next) => {
     const { article_id } = req.params
     retrieveArticleById(article_id)
+    .then((article) => {
+        res.status(200).send({article: article})
+    })
+    .catch(next)
+}
+
+exports.updateArticleVotes = (req, res, next) => {
+    const { article_id } = req.params
+    const { inc_votes } = req.body
+    updateArticleVotesById(article_id, inc_votes)
     .then((article) => {
         res.status(200).send({article: article})
     })
