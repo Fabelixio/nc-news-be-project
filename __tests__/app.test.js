@@ -257,7 +257,7 @@ describe("DELETE /api/comments/:comment_id", () => {
     })
 })
 
-xdescribe("GET /api/users", () => {
+describe("GET /api/users", () => {
     test("200: responds with an array of user objects", () => {
         return request(app)
         .get('/api/users')
