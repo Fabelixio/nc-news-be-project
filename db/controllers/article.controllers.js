@@ -3,22 +3,16 @@ const { checkExists } = require('../seeds/utils')
 
 exports.getArticles = (req, res, next) => {
     const { topic } = req.query
+    const topicPromise = [retrieveAllArticles(topic)]
     if(topic) {
-        checkExists("topics", "slug", topic)
-        .then(() => {
-            retrieveAllArticles(topic)
-            .then((articles) => {
-                res.status(200).send({ articles })
-            })
-        })
-        .catch(next)
-    } else {
-        retrieveAllArticles()
-        .then((articles) => {
-            res.status(200).send({ articles })
-        })
-        .catch(next)
+        topicPromise.push(checkExists("topics", "slug", topic))
     }
+    Promise.all(topicPromise)
+    .then((resolvedPromise) => {
+        const article = resolvedPromise[0]
+        res.status(200).send({ article })
+    })
+    .catch(next)
 }
 
 exports.getArticleById = (req, res, next) => {
