@@ -64,6 +64,46 @@ describe("GET /api/articles",() => {
             expect(article[0].comment_count).toBe('2')
         })
     })
+    test("200: should respond with all articles sorted by the requested column", () => {
+        return request(app)
+        .get('/api/articles?sort_by=title')
+        .expect(200)
+        .then(({body: { article }}) => {
+            expect(article).toBeSortedBy("title", { descending: true })
+        })
+    })
+    test("400: responds with error for an invalid sort_by query", () => {
+        return request(app)
+        .get('/api/articles?sort_by=banana')
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.msg).toBe('bad request')
+        })
+    })
+    test("200: responds with articles ordered in the direction of the request", () => {
+        return request(app)
+        .get('/api/articles?order=ASC')
+        .expect(200)
+        .then(({body: { article }}) => {
+                expect(article).toBeSortedBy("created_at", { descending: false })
+            })
+        })
+    test("400: responds with error for an invalid order query", () => {
+        return request(app)
+        .get('/api/articles?order=backwards')
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.msg).toBe('bad request')
+        })
+    })
+    test("200: responds with articles both sorted and ordered correctly", () => {
+        return request(app)
+        .get('/api/articles?sort_by=author&order=ASC')
+        .expect(200)
+        .then(({body: { article }}) => {
+            expect(article).toBeSortedBy("author", { descending: false })
+        })
+    })
 })
 
 describe("GET /api/articles/:article_id",() => {

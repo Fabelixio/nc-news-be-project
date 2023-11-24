@@ -1,7 +1,21 @@
 const db = require("./../connection")
 
-exports.retrieveAllArticles = (topic) => {
+exports.retrieveAllArticles = (topic, sortBy = 'created_at', order = 'DESC') => {
     const queryTopic = []
+    const validSort = [
+        "author",
+        "title",
+        "topic",
+        "created_at",
+        "votes",
+        "article_id",
+        "comment_count",
+        "article_img_url"
+    ]
+    const validOrder = ["ASC", "DESC"]
+    if(!validSort.includes(sortBy) || !validOrder.includes(order)) {
+        return Promise.reject({status: 400, msg: "bad request"})
+    }
     let queryString = `
     SELECT articles.author, articles.title, articles.topic, articles.article_id, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.article_id) AS comment_count
     FROM articles
@@ -10,7 +24,8 @@ exports.retrieveAllArticles = (topic) => {
         queryTopic.push(topic)
         queryString += ` WHERE articles.topic = $1`
     }
-    queryString += ` GROUP BY articles.author, articles.title, articles.topic, articles.article_id, articles.created_at, articles.votes, articles.article_img_url ORDER BY articles.created_at DESC;`
+    queryString += ` GROUP BY articles.author, articles.title, articles.topic, articles.article_id, articles.created_at, articles.votes, articles.article_img_url
+    ORDER BY ${sortBy} ${order}`
     return db.query(queryString, queryTopic)
     .then(({ rows }) => {
         return rows

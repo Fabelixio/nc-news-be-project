@@ -2,8 +2,8 @@ const {retrieveArticleById, retrieveAllArticles, updateArticleVotesById} = requi
 const { checkExists } = require('../seeds/utils')
 
 exports.getArticles = (req, res, next) => {
-    const { topic } = req.query
-    const topicPromise = [retrieveAllArticles(topic)]
+    const { topic, sort_by, order } = req.query
+    const topicPromise = [retrieveAllArticles(topic, sort_by, order)]
     if(topic) {
         topicPromise.push(checkExists("topics", "slug", topic))
     }
